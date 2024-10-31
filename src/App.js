@@ -1,4 +1,7 @@
 import {
+  Button,
+} from "antd";
+import {
   useState,
 } from "react";
 import {
@@ -7,12 +10,12 @@ import {
   now as toneNow,
 } from "tone";
 
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function AudioPlayer() {
   const [toneLoaded, setToneLoaded] = useState(false);
   const [audioStarted, setAudioStarted] = useState(false);
+  const [playerStarted, setPlayerStarted] = useState(false);
 
   const sampler = new Sampler({
     urls: {
@@ -43,23 +46,51 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <button onClick={initializeAudio}>Start Audio</button>
-        <button disabled={!(toneLoaded && audioStarted)} onClick={playC4E4}>Play!!</button>
-      </header>
+    <div className="player">
+      {playerStarted ?
+        <Button
+          type="primary"
+          disabled={!(toneLoaded && audioStarted)}
+          onClick={playC4E4}>
+          Play Interval
+        </Button>
+        :
+        <Button
+          type="primary"
+          onClick={() => {
+            initializeAudio();
+            setPlayerStarted(true);
+          }}>
+          Start
+        </Button>
+      }
+    </div>
+  )
+}
+
+function IntervalOptions() {
+  return (
+    <div className="controls">
+      <Button className="interval-button" type="primary">Major 2nd</Button>
+      <Button className="interval-button" type="primary">Major 3rd</Button>
+      <Button className="interval-button" type="primary">Perfect 4th</Button>
+    </div>
+  )
+}
+
+function Page() {
+  return (
+    <div className="container">
+      <AudioPlayer />
+      <IntervalOptions />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <div className="app">
+      <Page />
     </div>
   );
 }
