@@ -69,11 +69,35 @@ function AudioPlayer() {
 }
 
 function IntervalOptions() {
+  const [intervals, setIntervals] = useState({
+    "Minor 2nd": false,
+    "Major 2nd": true,
+    "Minor 3rd": false,
+    "Major 3rd": true,
+    "Perfect 4th": true,
+    "Perfect 5th": true,
+  });
+
+  const toggleInterval = (interval) => {
+    setIntervals((prevIntervals) => ({
+      ...prevIntervals,
+      [interval]: !prevIntervals[interval],
+    }))
+  }
+
   return (
     <div className="controls">
-      <Button className="interval-button" type="primary">Major 2nd</Button>
-      <Button className="interval-button" type="primary">Major 3rd</Button>
-      <Button className="interval-button" type="primary">Perfect 4th</Button>
+      {Object.keys(intervals).map((interval) => (
+        <Button
+          key={interval}
+          className="interval-button"
+          color="primary"
+          variant={intervals[interval] ? "solid" : "outlined"}
+          onClick={() => { toggleInterval(interval) }}
+        >
+          {interval}
+        </Button>
+      ))}
     </div>
   )
 }
