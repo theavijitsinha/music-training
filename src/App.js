@@ -1,7 +1,22 @@
+import {
+  useEffect,
+} from 'react';
+import {
+  Synth,
+} from "tone";
+
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    //create a synth and connect it to the main output (your speakers)
+    const synth = new Synth().toDestination();
+
+    //play a middle 'C' for the duration of an 8th note
+    synth.triggerAttackRelease("C4", "8n");
+  })
+
   return (
     <div className="App">
       <header className="App-header">
