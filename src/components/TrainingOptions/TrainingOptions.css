@@ -1,0 +1,30 @@
+.controls {
+  flex: 1;
+  padding-left: 10vw;
+  padding-right: 10vw;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.option-button {
+  height: 3rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.option-button>span {
+  font-size: 1.2rem;
+}
+
+.direction-button-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.direction-button {
+  flex: 1;
+}
+
+.interval-button {
+  width: 100%;
+}
