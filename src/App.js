@@ -1,5 +1,8 @@
 import {
   Button,
+  ConfigProvider,
+  theme,
+  Typography,
 } from "antd";
 import {
   useState,
@@ -12,7 +15,7 @@ import {
 
 import './App.css';
 
-function AudioPlayer() {
+function AudioPlayer(props) {
   const [toneLoaded, setToneLoaded] = useState(false);
   const [audioStarted, setAudioStarted] = useState(false);
   const [playerStarted, setPlayerStarted] = useState(false);
@@ -40,13 +43,13 @@ function AudioPlayer() {
 
   const playC4E4 = () => {
     //play a middle 'C' for the duration of an 8th note
-    sampler.triggerAttackRelease("C4", "8n", toneNow());
+    sampler.triggerAttackRelease("C4", 0.75, toneNow());
     //play a middle 'E' for the duration of an 8th note
-    sampler.triggerAttackRelease("E4", "8n", toneNow() + 0.5);
+    sampler.triggerAttackRelease("E4", 0.75, toneNow() + 0.75);
   };
 
   return (
-    <div className="player">
+    <div className="container player">
       {playerStarted ?
         <Button
           type="primary"
@@ -68,34 +71,123 @@ function AudioPlayer() {
   )
 }
 
-function IntervalOptions() {
-  const [intervals, setIntervals] = useState({
-    "Minor 2nd": false,
-    "Major 2nd": true,
-    "Minor 3rd": false,
-    "Major 3rd": true,
-    "Perfect 4th": true,
-    "Perfect 5th": true,
-  });
+function TrainingOptions(props) {
+  const intervals = {
+    "m2": {
+      name: "Minor 2nd",
+      semitone: 1,
+    },
+    "M2": {
+      name: "Major 2nd",
+      semitone: 2,
+    },
+    "m3": {
+      name: "Minor 3rd",
+      semitone: 3,
+    },
+    "M3": {
+      name: "Major 3rd",
+      semitone: 4,
+    },
+    "P4": {
+      name: "Perfect 4th",
+      semitone: 5,
+    },
+    "TT": {
+      name: "Tritone",
+      semitone: 6,
+    },
+    "P5": {
+      name: "Perfect 5th",
+      semitone: 7,
+    },
+    "m6": {
+      name: "Minor 6th",
+      semitone: 8,
+    },
+    "M6": {
+      name: "Major 6th",
+      semitone: 9,
+    },
+    "m7": {
+      name: "Minor 7th",
+      semitone: 10,
+    },
+    "M7": {
+      name: "Major 7th",
+      semitone: 11,
+    },
+    "P8": {
+      name: "Perfect Octave",
+      semitone: 12,
+    },
+  }
 
-  const toggleInterval = (interval) => {
-    setIntervals((prevIntervals) => ({
-      ...prevIntervals,
-      [interval]: !prevIntervals[interval],
-    }))
+  const toggleSemitone = (semitone) => {
+    props.setOptions((prevOptions) => {
+      let semitones = new Set(prevOptions.semitones)
+      semitones.has(semitone) ?
+        semitones.delete(semitone) :
+        semitones.add(semitone);
+      return {
+        ...prevOptions,
+        semitones: semitones,
+      }
+    })
   }
 
   return (
-    <div className="controls">
-      {Object.keys(intervals).map((interval) => (
+    <div className="container controls">
+      <Typography.Title
+        level={2}
+      >
+        Options
+      </Typography.Title>
+      <Typography.Title
+        level={3}
+      >
+        Playback direction
+      </Typography.Title>
+      <Button.Group className="direction-button-group">
         <Button
-          key={interval}
-          className="interval-button"
+          className="option-button direction-button"
           color="primary"
-          variant={intervals[interval] ? "solid" : "outlined"}
-          onClick={() => { toggleInterval(interval) }}
+          variant="solid"
+          onClick={() => { }}
         >
-          {interval}
+          Ascending
+        </Button>
+        <Button
+          className="option-button direction-button"
+          color="primary"
+          variant="solid"
+          onClick={() => { }}
+        >
+          Descending
+        </Button>
+        <Button
+          className="option-button direction-button"
+          color="primary"
+          variant="outlined"
+          onClick={() => { }}
+        >
+          Harmonic
+        </Button>
+      </Button.Group>
+      <Typography.Title
+        level={3}
+      >
+        Intervals
+      </Typography.Title>
+      {Object.entries(intervals).map(([key, interval]) => (
+        <Button
+          key={key}
+          className="option-button interval-button"
+          color="primary"
+          variant={props.options.semitones.has(interval.semitone) ? "solid" : "outlined"}
+          onClick={() => { toggleSemitone(interval.semitone) }}
+        >
+          {interval.name}
         </Button>
       ))}
     </div>
@@ -103,19 +195,47 @@ function IntervalOptions() {
 }
 
 function Page() {
+  const [options, setOptions] = useState({
+    timeGap: 0.75,
+    directions: new Set(["asc"]),
+    roots: new Set(["C4"]),
+    semitones: new Set([2, 4, 5, 7]),
+  });
+
   return (
-    <div className="container">
-      <AudioPlayer />
-      <IntervalOptions />
+    <div className="container page">
+      <AudioPlayer
+        options={options}
+      />
+      <TrainingOptions
+        options={options}
+        setOptions={setOptions}
+      />
     </div>
   )
 }
 
 function App() {
   return (
-    <div className="app">
-      <Page />
-    </div>
+    <ConfigProvider
+      theme={{
+        algorithm: theme.darkAlgorithm,
+        token: {
+          colorPrimary: "#4ceaff",
+          colorTextLightSolid: "#141414",
+          colorBgContainer: "#141414",
+        }
+      }}
+    >
+      <div
+        className="app"
+        style={{
+          backgroundColor: "#141414",
+        }}
+      >
+        <Page />
+      </div>
+    </ConfigProvider>
   );
 }
 
