@@ -22,7 +22,10 @@ function IntervalQuiz(props) {
   const [audioStarted, setAudioStarted] = useState(false);
   const [playerStarted, setPlayerStarted] = useState(false);
   const [currentInterval, setCurrentInterval] = useState(null)
+  const [currentSemitone, setCurrentSemitone] = useState(null)
+  const [currentDirection, setCurrentDirection] = useState("asc")
   const [semitoneChoices, setSemitoneChoices] = useState(new Set())
+  const [chosenSemitone, setChosenSemitone] = useState(null)
 
   const notes = {
     "C": 0,
@@ -116,19 +119,25 @@ function IntervalQuiz(props) {
     }
     const rootNote = rootChoices[Math.floor(Math.random() * rootChoices.length)]
     const secondNote = calculateSecondNote(rootNote.note, rootNote.octave, direction, semitone)
-    return [rootNote, secondNote]
+    return {
+      rootNote: rootNote,
+      secondNote: secondNote,
+      semitone: semitone,
+    }
   }
 
   const setRandomInterval = () => {
-    const [rootNote, secondNote] = generateNotesPair()
+    const {rootNote, secondNote, semitone} = generateNotesPair()
     let rootNoteStr = rootNote.note + String(rootNote.octave)
     let secondNoteStr = secondNote.note + String(secondNote.octave)
     setCurrentInterval([rootNoteStr, secondNoteStr])
+    setCurrentSemitone(semitone)
+    setCurrentDirection(props.options.direction)
   }
 
   const playInterval = () => {
     const timeGap = props.options.timeGap
-    const secondNoteDelay = props.options.direction === "har" ? 0 : timeGap
+    const secondNoteDelay = currentDirection === "har" ? 0 : timeGap
     sampler.triggerAttackRelease(currentInterval[0], timeGap, toneNow());
     sampler.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + secondNoteDelay);
   };
@@ -136,6 +145,11 @@ function IntervalQuiz(props) {
   const createNewLevel = () => {
     setRandomInterval()
     setSemitoneChoices(new Set(props.options.semitones))
+    setChosenSemitone(null)
+  }
+
+  const submitAnswer = (semitone) => {
+    setChosenSemitone(semitone)
   }
 
   return (
@@ -170,18 +184,40 @@ function IntervalQuiz(props) {
           <div className="answer-choices">
             {Object.entries(intervals)
               .filter(([_, interval]) => (semitoneChoices.has(interval.semitone)))
-              .map(([key, interval]) => (
-                <Button
-                  key={key}
-                  className="choice-button"
-                  color="primary"
-                  variant="outlined"
-                  onClick={() => { }}
-                  shape="round"
-                >
-                  {interval.name}
-                </Button>
-              ))}
+              .map(([key, interval]) => {
+                let style = {}
+                let color = "default"
+                let variant = "outlined"
+                if (chosenSemitone === null) {
+                  color = "primary"
+                } else if (interval.semitone === currentSemitone) {
+                  style = {
+                    backgroundColor: "#6bcb6f",
+                  }
+                  variant = "solid"
+                } else if (interval.semitone === chosenSemitone) {
+                  style = {
+                    backgroundColor: "#ff7465",
+                  }
+                  variant = "solid"
+                }
+                return (
+                  <Button
+                    key={key}
+                    className="choice-button"
+                    color={color}
+                    style={style}
+                    variant={variant}
+                    onClick={() => {
+                      if (chosenSemitone !== null) return;
+                      submitAnswer(interval.semitone)
+                    }}
+                    shape="round"
+                  >
+                    {interval.name}
+                  </Button>
+                )
+              })}
           </div>
         </div>
         :
