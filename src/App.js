@@ -23,7 +23,7 @@ function Page() {
   });
 
   return (
-    <div className="container page">
+    <div className="page">
       <IntervalQuiz
         options={options}
       />

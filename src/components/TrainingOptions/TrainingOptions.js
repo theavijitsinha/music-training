@@ -1,7 +1,14 @@
 import {
+  CloseOutlined,
+  MenuOutlined,
+} from "@ant-design/icons";
+import {
   Button,
   Typography,
 } from "antd";
+import React, {
+  useState
+} from "react";
 
 import {
   intervals,
@@ -11,6 +18,8 @@ import {
 import './TrainingOptions.css'
 
 function TrainingOptions(props) {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   const setDirection = (directionKey) => {
     props.setOptions((prevOptions) => ({
       ...prevOptions,
@@ -32,45 +41,74 @@ function TrainingOptions(props) {
   }
 
   return (
-    <div className="container controls">
-      <Typography.Title
-        level={2}
+    <React.Fragment>
+      <Button
+        className="sidebar-open-button"
+        size="large"
+        color="primary"
+        variant="outlined"
+        onClick={() => { setSidebarOpen(true) }}
+        icon={<MenuOutlined />}
+        shape="circle"
+      />
+      <div
+        className="controls"
+        style={{
+          "--translate-x-size": sidebarOpen ? "0%" : "100%",
+        }}
       >
-        Options
-      </Typography.Title>
-      <Typography.Title
-        level={3}
-      >
-        Playback direction
-      </Typography.Title>
-      {Object.entries(directions).map(([key, direction]) => (
         <Button
-          key={key}
-          className="option-button direction-button"
+          className="sidebar-close-button"
+          size="large"
           color="primary"
-          variant={props.options.direction === key ? "solid" : "filled"}
-          onClick={() => { setDirection(key) }}
-        >
-          {direction.name}
-        </Button>
-      ))}
-      <Typography.Title
-        level={3}
-      >
-        Intervals
-      </Typography.Title>
-      {Object.entries(intervals).map(([key, interval]) => (
-        <Button
-          key={key}
-          className="option-button interval-button"
-          color="primary"
-          variant={props.options.semitones.has(interval.semitone) ? "solid" : "filled"}
-          onClick={() => { toggleSemitone(interval.semitone) }}
-        >
-          {interval.name}
-        </Button>
-      ))}
-    </div>
+          variant="outlined"
+          onClick={() => { setSidebarOpen(false) }}
+          icon={<CloseOutlined />}
+          shape="circle"
+        />
+        <div className="controls-scroll">
+          <Typography.Title
+            level={2}
+          >
+            Options
+          </Typography.Title>
+          <Typography.Title
+            level={3}
+          >
+            Playback direction
+          </Typography.Title>
+          {Object.entries(directions).map(([key, direction]) => (
+            <Button
+              key={key}
+              className="option-button direction-button"
+              shape="round"
+              color="primary"
+              variant={props.options.direction === key ? "solid" : "filled"}
+              onClick={() => { setDirection(key) }}
+            >
+              {direction.name}
+            </Button>
+          ))}
+          <Typography.Title
+            level={3}
+          >
+            Intervals
+          </Typography.Title>
+          {Object.entries(intervals).map(([key, interval]) => (
+            <Button
+              key={key}
+              className="option-button interval-button"
+              shape="round"
+              color="primary"
+              variant={props.options.semitones.has(interval.semitone) ? "solid" : "filled"}
+              onClick={() => { toggleSemitone(interval.semitone) }}
+            >
+              {interval.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </React.Fragment>
   )
 }
 
