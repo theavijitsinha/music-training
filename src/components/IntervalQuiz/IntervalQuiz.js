@@ -62,7 +62,7 @@ function IntervalQuiz(props) {
   const noteRangeFilter = (note, octave, direction, semitone) => {
     if (octave < firstOctave) return false;
     if (octave > lastOctave) return false;
-    if (direction === "asc") {
+    if (direction === "asc" || direction === "har") {
       if (octave < lastOctave) return true;
       const noteNumber = notes[note]
       return (noteNumber + semitone) < Object.keys(notes)
@@ -77,7 +77,7 @@ function IntervalQuiz(props) {
   const calculateSecondNote = (note, octave, direction, semitone) => {
     const rootNoteNumber = notes[note]
     let secondOctave = octave
-    let secondNoteNumber = direction === "asc" ? rootNoteNumber + semitone :
+    let secondNoteNumber = direction === "asc" || direction === "har" ? rootNoteNumber + semitone :
       direction === "des" ? rootNoteNumber - semitone : null
     if (secondNoteNumber >= Object.keys(notes).length) {
       secondOctave += 1
@@ -125,8 +125,9 @@ function IntervalQuiz(props) {
 
   const playInterval = () => {
     const timeGap = props.options.timeGap
+    const secondNoteDelay = props.options.direction === "har" ? 0 : timeGap
     sampler.triggerAttackRelease(currentInterval[0], timeGap, toneNow());
-    sampler.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + timeGap);
+    sampler.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + secondNoteDelay);
   };
 
   return (

@@ -6,6 +6,18 @@ import {
 import './TrainingOptions.css'
 
 function TrainingOptions(props) {
+  const directions = {
+    "asc": {
+      name: "Ascending",
+    },
+    "des": {
+      name: "Descending",
+    },
+    "har": {
+      name: "Harmonic",
+    }
+  }
+
   const intervals = {
     "m2": {
       name: "Minor 2nd",
@@ -57,6 +69,13 @@ function TrainingOptions(props) {
     },
   }
 
+  const setDirection = (directionKey) => {
+    props.setOptions((prevOptions) => ({
+      ...prevOptions,
+      direction: directionKey,
+    }))
+  }
+
   const toggleSemitone = (semitone) => {
     props.setOptions((prevOptions) => {
       let semitones = new Set(prevOptions.semitones)
@@ -82,32 +101,16 @@ function TrainingOptions(props) {
       >
         Playback direction
       </Typography.Title>
-      <Button.Group className="direction-button-group">
+      {Object.entries(directions).map(([key, direction]) => (
         <Button
           className="option-button direction-button"
           color="primary"
-          variant="solid"
-          onClick={() => { }}
+          variant={props.options.direction === key ? "solid" : "filled"}
+          onClick={() => { setDirection(key) }}
         >
-          Ascending
+          {direction.name}
         </Button>
-        <Button
-          className="option-button direction-button"
-          color="primary"
-          variant="solid"
-          onClick={() => { }}
-        >
-          Descending
-        </Button>
-        <Button
-          className="option-button direction-button"
-          color="primary"
-          variant="outlined"
-          onClick={() => { }}
-        >
-          Harmonic
-        </Button>
-      </Button.Group>
+      ))}
       <Typography.Title
         level={3}
       >
@@ -118,7 +121,7 @@ function TrainingOptions(props) {
           key={key}
           className="option-button interval-button"
           color="primary"
-          variant={props.options.semitones.has(interval.semitone) ? "solid" : "outlined"}
+          variant={props.options.semitones.has(interval.semitone) ? "solid" : "filled"}
           onClick={() => { toggleSemitone(interval.semitone) }}
         >
           {interval.name}
