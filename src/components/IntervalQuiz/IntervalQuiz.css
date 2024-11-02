@@ -4,3 +4,11 @@
   align-items: center;
   flex: 3;
 }
+
+.play-button {
+  width: 5rem !important;
+  height: 5rem !important;
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'center';
+}

@@ -1,4 +1,7 @@
 import {
+  CaretRightFilled,
+} from "@ant-design/icons";
+import {
   Button,
 } from "antd";
 import {
@@ -130,11 +133,16 @@ function IntervalQuiz(props) {
     <div className="container player">
       {playerStarted ?
         <Button
+          className="play-button"
           type="primary"
           disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
-          onClick={playInterval}>
-          Play Interval
-        </Button>
+          onClick={playInterval}
+          icon={<CaretRightFilled style={{
+            fontSize: "2.5rem",
+            marginLeft: "0.3rem",
+          }} />}
+          shape="circle"
+        />
         :
         <Button
           type="primary"
@@ -142,7 +150,8 @@ function IntervalQuiz(props) {
             initializeAudio();
             setPlayerStarted(true);
             setRandomInterval();
-          }}>
+          }}
+        >
           Start
         </Button>
       }

@@ -41,7 +41,7 @@ function App() {
       theme={{
         algorithm: theme.darkAlgorithm,
         token: {
-          colorPrimary: "#4ceaff",
+          colorPrimary: "#c3e3ff",
           colorTextLightSolid: "#141414",
           colorBgContainer: "#141414",
         }
