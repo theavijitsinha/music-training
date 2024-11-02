@@ -2,7 +2,7 @@
   background-color: #141414;
   position: relative;
   width: 35rem;
-  max-width: 100vw;
+  max-width: 50vw;
   height: 100vh;
   overflow-y: auto;
 }
@@ -59,13 +59,16 @@
 @media (orientation: portrait) {
   .controls {
     position: absolute;
+    max-width: 100vw;
     right: 0rem;
     transform: translateX(var(--translate-x-size));
   }
 }
 
 @media (orientation: landscape) {
-  .sidebar-close-button,.sidebar-open-button {
+
+  .sidebar-close-button,
+  .sidebar-open-button {
     display: none;
   }
 }
