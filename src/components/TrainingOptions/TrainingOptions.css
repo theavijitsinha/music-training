@@ -7,6 +7,12 @@
   overflow-y: auto;
 }
 
+@supports (height: 100dvh) {
+  .controls {
+    height: 100dvh;
+  }
+}
+
 .controls::-webkit-scrollbar {
   display: none;
 }

@@ -6,3 +6,9 @@
   width: 100vw;
   color: #141414;
 }
+
+@supports (min-height: 100dvh) {
+  .page {
+    min-height: 100dvh;
+  }
+}
