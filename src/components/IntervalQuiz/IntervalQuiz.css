@@ -5,10 +5,46 @@
   flex: 3;
 }
 
+.audio-controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .play-button {
   width: 5rem !important;
   height: 5rem !important;
   display: 'flex';
   align-items: 'center';
   justify-content: 'center';
+}
+
+.next-button {
+  width: 4rem !important;
+  height: 4rem !important;
+  position: absolute;
+  left: calc(50% + 4.5rem);
+}
+
+.answer-choices {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 70% !important;
+  width: 70% !important;
+  height: 4rem !important;
+  position: absolute;
+  top: 8rem;
+  left: 15%;
+}
+
+.choice-button {
+  height: 2.5rem;
+  margin: 0.5rem 0.2rem;
+}
+
+.choice-button>span {
+  font-size: 1rem;
 }

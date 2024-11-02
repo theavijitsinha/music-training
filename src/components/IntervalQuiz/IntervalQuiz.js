@@ -1,5 +1,6 @@
 import {
   CaretRightFilled,
+  StepForwardFilled,
 } from "@ant-design/icons";
 import {
   Button,
@@ -14,12 +15,14 @@ import {
 } from "tone";
 
 import './IntervalQuiz.css'
+import { intervals } from "../../constants";
 
 function IntervalQuiz(props) {
   const [toneLoaded, setToneLoaded] = useState(false);
   const [audioStarted, setAudioStarted] = useState(false);
   const [playerStarted, setPlayerStarted] = useState(false);
   const [currentInterval, setCurrentInterval] = useState(null)
+  const [semitoneChoices, setSemitoneChoices] = useState(new Set())
 
   const notes = {
     "C": 0,
@@ -130,27 +133,64 @@ function IntervalQuiz(props) {
     sampler.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + secondNoteDelay);
   };
 
+  const createNewLevel = () => {
+    setRandomInterval()
+    setSemitoneChoices(new Set(props.options.semitones))
+  }
+
   return (
-    <div className="container player">
+    <div className="player">
       {playerStarted ?
-        <Button
-          className="play-button"
-          type="primary"
-          disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
-          onClick={playInterval}
-          icon={<CaretRightFilled style={{
-            fontSize: "2.5rem",
-            marginLeft: "0.3rem",
-          }} />}
-          shape="circle"
-        />
+        <div className="audio-controls">
+          <Button
+            className="play-button"
+            type="primary"
+            disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
+            onClick={playInterval}
+            icon={<CaretRightFilled style={{
+              fontSize: "2.5rem",
+              marginLeft: "0.3rem",
+            }} />}
+            shape="circle"
+          />
+          <Button
+            className="next-button"
+            color="primary"
+            variant="outlined"
+            disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
+            onClick={() => {
+              setInterval(null)
+              createNewLevel()
+            }}
+            icon={<StepForwardFilled style={{
+              fontSize: "2rem",
+            }} />}
+            shape="circle"
+          />
+          <div className="answer-choices">
+            {Object.entries(intervals)
+              .filter(([_, interval]) => (semitoneChoices.has(interval.semitone)))
+              .map(([key, interval]) => (
+                <Button
+                  key={key}
+                  className="choice-button"
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => { }}
+                  shape="round"
+                >
+                  {interval.name}
+                </Button>
+              ))}
+          </div>
+        </div>
         :
         <Button
           type="primary"
           onClick={() => {
             initializeAudio();
             setPlayerStarted(true);
-            setRandomInterval();
+            createNewLevel();
           }}
         >
           Start
