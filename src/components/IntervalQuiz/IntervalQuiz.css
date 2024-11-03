@@ -54,11 +54,15 @@
 .score-text-correct {
   position: absolute;
   right: 2rem;
+  width: 3rem;
+  text-align: right;
 }
 
 .score-text-total {
   position: absolute;
   left: 2rem;
+  width: 3rem;
+  text-align: left;
 }
 
 .answer-choices {
