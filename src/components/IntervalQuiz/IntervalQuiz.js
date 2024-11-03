@@ -7,6 +7,8 @@ import {
   Typography,
 } from "antd";
 import {
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import {
@@ -47,19 +49,38 @@ function IntervalQuiz(props) {
   const firstOctave = 3
   const lastOctave = 6
 
-  const sampler = new Sampler({
-    urls: {
-      "C4": "C4.mp3",
-      "D#4": "Ds4.mp3",
-      "F#4": "Fs4.mp3",
-      "A4": "A4.mp3",
-    },
-    release: 1,
-    baseUrl: "https://tonejs.github.io/audio/salamander/",
-    onload: () => {
-      setToneLoaded(true);
-    },
-  }).toDestination();
+  const sampler = useRef(null);
+  useEffect(() => {
+    // Only initialize Sampler once
+    sampler.current = new Sampler({
+      urls: {
+        "C1": "C1.mp3",
+        "F#1": "Fs1.mp3",
+        "C2": "C2.mp3",
+        "F#2": "Fs2.mp3",
+        "C3": "C3.mp3",
+        "F#3": "Fs3.mp3",
+        "C4": "C4.mp3",
+        "F#4": "Fs4.mp3",
+        "C5": "C5.mp3",
+        "F#5": "Fs5.mp3",
+        "C6": "C6.mp3",
+        "F#6": "Fs6.mp3",
+        "C7": "C7.mp3",
+        "F#7": "Fs7.mp3"
+      },
+      release: 1,
+      baseUrl: "https://tonejs.github.io/audio/salamander/",
+      onload: () => {
+        setToneLoaded(true);
+      },
+    }).toDestination();
+
+    // Cleanup when the component unmounts (optional)
+    return () => {
+      sampler.current.dispose();
+    };
+  }, []); // Empty dependency array ensures this runs only once
 
   const initializeAudio = () => {
     audioStart()
@@ -141,8 +162,8 @@ function IntervalQuiz(props) {
   const playInterval = () => {
     const timeGap = props.options.timeGap
     const secondNoteDelay = currentDirection === "har" ? 0 : timeGap
-    sampler.triggerAttackRelease(currentInterval[0], timeGap, toneNow());
-    sampler.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + secondNoteDelay);
+    sampler.current.triggerAttackRelease(currentInterval[0], timeGap, toneNow());
+    sampler.current.triggerAttackRelease(currentInterval[1], timeGap, toneNow() + secondNoteDelay);
   };
 
   const createNewLevel = () => {
