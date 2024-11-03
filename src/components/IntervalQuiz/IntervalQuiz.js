@@ -1,5 +1,6 @@
 import {
   CaretRightFilled,
+  CloseOutlined,
   StepForwardFilled,
 } from "@ant-design/icons";
 import {
@@ -169,10 +170,35 @@ function IntervalQuiz(props) {
     }
   }
 
+  const resetScore = () => {
+    setCorrectAnswers(0)
+    setTotalAnswers(0)
+  }
+
+  const startTraining = () => {
+    resetScore()
+    if (!audioStarted) initializeAudio()
+    createNewLevel()
+    setPlayerStarted(true)
+  }
+
+  const stopTraining = () => {
+    setPlayerStarted(false)
+  }
+
   return (
     <div className="player">
       {playerStarted ?
         <div className="audio-controls">
+          <Button
+            className="stop-quiz-button"
+            size="large"
+            color="primary"
+            variant="outlined"
+            onClick={stopTraining}
+            icon={<CloseOutlined />}
+            shape="circle"
+          />
           <Button
             className="play-button"
             type="primary"
@@ -262,11 +288,7 @@ function IntervalQuiz(props) {
           type="primary"
           className="start-button"
           shape="round"
-          onClick={() => {
-            initializeAudio();
-            setPlayerStarted(true);
-            createNewLevel();
-          }}
+          onClick={startTraining}
         >
           Start
         </Button>

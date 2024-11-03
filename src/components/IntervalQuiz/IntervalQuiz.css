@@ -13,6 +13,12 @@
   width: 100%;
 }
 
+.stop-quiz-button {
+  position: fixed;
+  left: 2rem;
+  top: 2rem;
+}
+
 .play-button {
   width: 5rem !important;
   height: 5rem !important;
