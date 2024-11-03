@@ -260,6 +260,8 @@ function IntervalQuiz(props) {
         :
         <Button
           type="primary"
+          className="start-button"
+          shape="round"
           onClick={() => {
             initializeAudio();
             setPlayerStarted(true);
