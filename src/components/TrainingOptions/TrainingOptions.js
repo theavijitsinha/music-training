@@ -4,6 +4,7 @@ import {
 } from "@ant-design/icons";
 import {
   Button,
+  Select,
   Typography,
 } from "antd";
 import React, {
@@ -13,6 +14,9 @@ import React, {
 import {
   intervals,
   directions,
+  notes,
+  lastOctave,
+  firstOctave,
 } from "../../constants"
 
 import './TrainingOptions.css'
@@ -24,6 +28,28 @@ function TrainingOptions(props) {
     props.setOptions((prevOptions) => ({
       ...prevOptions,
       direction: directionKey,
+    }))
+  }
+
+  const setRoots = (rootStrs) => {
+    const rootStrsSet = new Set(rootStrs)
+    const roots = {}
+    for (let octave = firstOctave; octave <= lastOctave; octave++) {
+      for (const note in notes) {
+        if (Object.prototype.hasOwnProperty.call(notes, note)) {
+          let label = note + String(octave)
+          if (rootStrsSet.has(label)) {
+            if (!roots.hasOwnProperty(octave)) {
+              roots[octave] = []
+            }
+            roots[octave].push(note)
+          }
+        }
+      }
+    }
+    props.setOptions((prevOptions) => ({
+      ...prevOptions,
+      roots: roots,
     }))
   }
 
@@ -39,6 +65,28 @@ function TrainingOptions(props) {
       }
     })
   }
+
+  const rootNotesOptions = []
+  for (let octave = firstOctave; octave <= lastOctave; octave++) {
+    for (const note in notes) {
+      if (Object.prototype.hasOwnProperty.call(notes, note)) {
+        let label = note + String(octave)
+        rootNotesOptions.push({
+          label: label,
+          value: label,
+          octave: octave,
+          note: note,
+        })
+      }
+    }
+  }
+
+  const rootNotesValues = []
+  Object.entries(props.options.roots).forEach(([octave, notes]) => {
+    notes.forEach((note) => {
+      rootNotesValues.push(note + String(octave))
+    })
+  })
 
   return (
     <React.Fragment>
@@ -72,6 +120,22 @@ function TrainingOptions(props) {
           >
             Options
           </Typography.Title>
+          <Typography.Title
+            level={3}
+          >
+            Root notes
+          </Typography.Title>
+          <Select
+            allowClear
+            mode="multiple"
+            style={{
+              width: '100%',
+            }}
+            placeholder="Please select"
+            value={rootNotesValues}
+            onChange={setRoots}
+            options={rootNotesOptions}
+          />
           <Typography.Title
             level={3}
           >

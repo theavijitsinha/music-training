@@ -17,8 +17,14 @@ import {
   now as toneNow,
 } from "tone";
 
+import {
+  firstOctave,
+  intervals,
+  lastOctave,
+  notes
+} from "../../constants";
+
 import './IntervalQuiz.css'
-import { intervals } from "../../constants";
 
 function IntervalQuiz(props) {
   const [toneLoaded, setToneLoaded] = useState(false);
@@ -31,23 +37,6 @@ function IntervalQuiz(props) {
   const [chosenSemitone, setChosenSemitone] = useState(null)
   const [correctAnswers, setCorrectAnswers] = useState(0)
   const [totalAnswers, setTotalAnswers] = useState(0)
-
-  const notes = {
-    "C": 0,
-    "C#": 1,
-    "D": 2,
-    "D#": 3,
-    "E": 4,
-    "F": 5,
-    "F#": 6,
-    "G": 7,
-    "G#": 8,
-    "A": 9,
-    "A#": 10,
-    "B": 11,
-  }
-  const firstOctave = 3
-  const lastOctave = 6
 
   const sampler = useRef(null);
   useEffect(() => {
