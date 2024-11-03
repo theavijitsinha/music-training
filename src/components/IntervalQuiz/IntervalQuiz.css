@@ -28,6 +28,39 @@
   left: calc(50% + 4.5rem);
 }
 
+.score-text {
+  position: absolute;
+  bottom: 12rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-text-correct,
+.score-text-slash,
+.score-text-total {
+  height: 2rem !important;
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+  margin-left: 0rem !important;
+  margin-right: 0rem !important;
+}
+
+.score-text-slash {
+  flex: 1;
+}
+
+.score-text-correct {
+  position: absolute;
+  right: 2rem;
+}
+
+.score-text-total {
+  position: absolute;
+  left: 2rem;
+}
+
 .answer-choices {
   display: flex;
   justify-content: center;

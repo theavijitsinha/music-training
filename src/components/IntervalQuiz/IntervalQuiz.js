@@ -4,6 +4,7 @@ import {
 } from "@ant-design/icons";
 import {
   Button,
+  Typography,
 } from "antd";
 import {
   useState,
@@ -26,6 +27,8 @@ function IntervalQuiz(props) {
   const [currentDirection, setCurrentDirection] = useState("asc")
   const [semitoneChoices, setSemitoneChoices] = useState(new Set())
   const [chosenSemitone, setChosenSemitone] = useState(null)
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [totalAnswers, setTotalAnswers] = useState(0)
 
   const notes = {
     "C": 0,
@@ -127,7 +130,7 @@ function IntervalQuiz(props) {
   }
 
   const setRandomInterval = () => {
-    const {rootNote, secondNote, semitone} = generateNotesPair()
+    const { rootNote, secondNote, semitone } = generateNotesPair()
     let rootNoteStr = rootNote.note + String(rootNote.octave)
     let secondNoteStr = secondNote.note + String(secondNote.octave)
     setCurrentInterval([rootNoteStr, secondNoteStr])
@@ -150,6 +153,10 @@ function IntervalQuiz(props) {
 
   const submitAnswer = (semitone) => {
     setChosenSemitone(semitone)
+    setTotalAnswers(totalAnswers + 1)
+    if (semitone === currentSemitone) {
+      setCorrectAnswers(correctAnswers + 1)
+    }
   }
 
   return (
@@ -218,6 +225,26 @@ function IntervalQuiz(props) {
                   </Button>
                 )
               })}
+          </div>
+          <div className="score-text">
+            <Typography.Title
+              className="score-text-correct"
+              level={3}
+            >
+              {correctAnswers}
+            </Typography.Title>
+            <Typography.Title
+              className="score-text-slash"
+              level={3}
+            >
+              /
+            </Typography.Title>
+            <Typography.Title
+              className="score-text-total"
+              level={3}
+            >
+              {totalAnswers}
+            </Typography.Title>
           </div>
         </div>
         :
