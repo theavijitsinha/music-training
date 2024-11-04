@@ -5,13 +5,23 @@ import {
 import {
   useState,
 } from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom/dist";
 
 import IntervalQuiz from "./components/IntervalQuiz/IntervalQuiz";
 import TrainingOptions from "./components/TrainingOptions/TrainingOptions";
 
 import './App.css';
 
-function Page() {
+function Root() {
+  return (
+    <div className="root-page" />
+  )
+}
+
+function IntervalsTrainingPage() {
   const [options, setOptions] = useState({
     timeGap: 0.75,
     direction: "asc",
@@ -23,7 +33,7 @@ function Page() {
   });
 
   return (
-    <div className="page">
+    <div className="intervals-training-page">
       <IntervalQuiz
         options={options}
       />
@@ -36,6 +46,20 @@ function Page() {
 }
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "",
+      element: <Root />,
+    },
+    {
+      path: "intervals",
+      element: <IntervalsTrainingPage />,
+    },
+  ],
+    {
+      basename: "/music/training",
+    }
+  );
   return (
     <ConfigProvider
       theme={{
@@ -53,7 +77,7 @@ function App() {
           backgroundColor: "#141414",
         }}
       >
-        <Page />
+        <RouterProvider router={router} />
       </div>
     </ConfigProvider>
   );
