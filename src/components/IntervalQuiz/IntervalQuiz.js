@@ -210,20 +210,22 @@ function IntervalQuiz(props) {
             }} />}
             shape="circle"
           />
-          <Button
-            className="next-button"
-            color="primary"
-            variant="outlined"
-            disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
-            onClick={() => {
-              setInterval(null)
-              createNewLevel()
-            }}
-            icon={<StepForwardFilled style={{
-              fontSize: "2rem",
-            }} />}
-            shape="circle"
-          />
+          {chosenSemitone === null ? null :
+            <Button
+              className="next-button"
+              color="primary"
+              variant="outlined"
+              disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
+              onClick={() => {
+                setInterval(null)
+                createNewLevel()
+              }}
+              icon={<StepForwardFilled style={{
+                fontSize: "2rem",
+              }} />}
+              shape="circle"
+            />
+          }
           <div className="answer-choices">
             {Object.entries(intervals)
               .filter(([_, interval]) => (semitoneChoices.has(interval.semitone)))
