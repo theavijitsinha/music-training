@@ -68,6 +68,8 @@ function App() {
           colorPrimary: "#c3e3ff",
           colorTextLightSolid: "#141414",
           colorBgContainer: "#141414",
+          colorPrimaryBorder: "#c3e3ff",
+          colorBgSpotlight: "#c3e3ff",
         }
       }}
     >

@@ -5,6 +5,7 @@ import {
 import {
   Button,
   Select,
+  Slider,
   Typography,
 } from "antd";
 import React, {
@@ -50,6 +51,13 @@ function TrainingOptions(props) {
     props.setOptions((prevOptions) => ({
       ...prevOptions,
       roots: roots,
+    }))
+  }
+
+  const setTimeGap = (timeGap) => {
+    props.setOptions((prevOptions) => ({
+      ...prevOptions,
+      timeGap: timeGap,
     }))
   }
 
@@ -153,6 +161,18 @@ function TrainingOptions(props) {
               {direction.name}
             </Button>
           ))}
+          <Typography.Title
+            level={3}
+          >
+            Note duration
+          </Typography.Title>
+          <Slider
+            min={0.3}
+            max={1}
+            step={0.05}
+            onChange={setTimeGap}
+            value={props.options.timeGap}
+          />
           <Typography.Title
             level={3}
           >
