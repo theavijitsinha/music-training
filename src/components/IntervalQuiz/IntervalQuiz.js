@@ -41,6 +41,7 @@ function IntervalQuiz(props) {
   const [totalAnswers, setTotalAnswers] = useState(0)
 
   const sampler = useRef(null);
+  const userInteractionDone = useRef(false)
   useEffect(() => {
     sampler.current = new Sampler({
       urls: {
@@ -73,12 +74,14 @@ function IntervalQuiz(props) {
 
   const initializeAudio = () => {
     const silentAudio = document.getElementById('silentAudio');
-    silentAudio.play().then(() => {
-      audioStart()
-        .then(() => {
-          setAudioStarted(true);
-        })
-    })
+    if (userInteractionDone.current) {
+      silentAudio.play().then(() => {
+        audioStart()
+          .then(() => {
+            setAudioStarted(true);
+          })
+      })
+    }
   }
 
   useEffect(() => {
@@ -197,7 +200,10 @@ function IntervalQuiz(props) {
 
   const startTraining = () => {
     resetScore()
-    if (!audioStarted) initializeAudio()
+    if (!audioStarted) {
+      userInteractionDone.current = true
+      initializeAudio()
+    }
     createNewLevel()
     setPlayerStarted(true)
   }
@@ -222,7 +228,7 @@ function IntervalQuiz(props) {
           <Button
             className="play-button"
             type="primary"
-            disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
+            disabled={!(toneLoaded && audioStarted && (currentInterval !== null))}
             onClick={playInterval}
             icon={<CaretRightFilled style={{
               fontSize: "2.5rem",
@@ -235,7 +241,7 @@ function IntervalQuiz(props) {
               className="next-button"
               color="primary"
               variant="outlined"
-              disabled={!(toneLoaded && audioStarted && currentInterval !== null)}
+              disabled={!(toneLoaded && audioStarted && (currentInterval !== null))}
               onClick={() => {
                 setInterval(null)
                 createNewLevel()
