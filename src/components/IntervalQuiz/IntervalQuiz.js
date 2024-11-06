@@ -13,6 +13,7 @@ import {
   useState,
 } from "react";
 import {
+  getContext as audioContext,
   Sampler,
   start as audioStart,
   now as toneNow,
@@ -41,7 +42,6 @@ function IntervalQuiz(props) {
 
   const sampler = useRef(null);
   useEffect(() => {
-    // Only initialize Sampler once
     sampler.current = new Sampler({
       urls: {
         "C1": "C1.mp3",
@@ -66,11 +66,10 @@ function IntervalQuiz(props) {
       },
     }).toDestination();
 
-    // Cleanup when the component unmounts (optional)
     return () => {
       sampler.current.dispose();
     };
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   const initializeAudio = () => {
     audioStart()
@@ -78,6 +77,23 @@ function IntervalQuiz(props) {
         setAudioStarted(true);
       });
   }
+
+  useEffect(() => {
+    function handleResume() {
+      if (audioContext().state === 'suspended') {
+        setAudioStarted(false)
+        initializeAudio()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleResume);
+    window.addEventListener('focus', handleResume);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleResume);
+      window.removeEventListener('focus', handleResume);
+    };
+  }, []);
 
   const noteRangeFilter = (note, octave, direction, semitone) => {
     if (octave < firstOctave) return false;
