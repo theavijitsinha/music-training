@@ -72,14 +72,18 @@ function IntervalQuiz(props) {
   }, []);
 
   const initializeAudio = () => {
-    audioStart()
-      .then(() => {
-        setAudioStarted(true);
-      });
+    const silentAudio = document.getElementById('silentAudio');
+    silentAudio.play().then(() => {
+      audioStart()
+        .then(() => {
+          setAudioStarted(true);
+        })
+    })
   }
 
   useEffect(() => {
     function handleResume() {
+      if (document.hidden) return
       if (audioContext().state === 'suspended') {
         setAudioStarted(false)
         initializeAudio()

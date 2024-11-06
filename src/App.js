@@ -79,6 +79,9 @@ function App() {
           backgroundColor: "#141414",
         }}
       >
+        <audio id="silentAudio">
+          <source src="/music/training/silent.mp3" type="audio/mp3" />
+        </audio>
         <RouterProvider router={router} />
       </div>
     </ConfigProvider>
