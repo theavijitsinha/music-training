@@ -75,12 +75,26 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  overflow-y: auto;
   max-width: 70% !important;
   width: 70% !important;
-  height: 4rem !important;
+  height: auto !important;
+  max-height: calc(50vh + 2.5vh - 8rem);
+  /* 1/2 of viewport + 1/2 of play button - top */
   position: absolute;
   top: 8rem;
   left: 15%;
+}
+
+.answer-choices::-webkit-scrollbar { 
+  display: none;
+}
+
+@supports (max-height: 100dvh) {
+  .answer-choices {
+    max-height: calc(50dvh + 2.5vh - 8rem);
+    /* 1/2 of viewport + 1/2 of play button - top */
+  }
 }
 
 .choice-button {
