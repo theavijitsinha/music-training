@@ -77,3 +77,5 @@ export const notes = {
 }
 export const firstOctave = 1
 export const lastOctave = 7
+
+export const storageBaseKey = "music.training"
