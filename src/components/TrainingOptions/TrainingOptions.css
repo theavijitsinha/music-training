@@ -21,8 +21,8 @@
 .controls-scroll {
   width: 100%;
   box-sizing: border-box;
-  padding-left: 5vw;
-  padding-right: 5vw;
+  padding-left: 6rem;
+  padding-right: 6rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
 }
@@ -63,6 +63,11 @@
     max-width: 100vw;
     right: 0rem;
     transform: translateX(var(--translate-x-size));
+  }
+
+  .controls-scroll {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
