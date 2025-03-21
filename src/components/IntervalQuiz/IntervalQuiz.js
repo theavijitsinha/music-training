@@ -137,9 +137,16 @@ function IntervalQuiz(props) {
     }
   }
 
+  const getRandomElement = (array) => {
+    if (!array.length) return null
+
+    const randomIndex = crypto.getRandomValues(new Uint32Array(1))[0] % array.length
+    return array[randomIndex]
+  }
+
   const generateNotesPair = () => {
     let semitoneChoices = [...props.options.semitones]
-    const semitone = semitoneChoices[Math.floor(Math.random() * semitoneChoices.length)];
+    const semitone = getRandomElement(semitoneChoices)
     const direction = props.options.direction
     let rootChoices = []
     for (const octaveStr in props.options.roots) {
@@ -154,7 +161,7 @@ function IntervalQuiz(props) {
         })
       }
     }
-    const rootNote = rootChoices[Math.floor(Math.random() * rootChoices.length)]
+    const rootNote = getRandomElement(rootChoices)
     const secondNote = calculateSecondNote(rootNote.note, rootNote.octave, direction, semitone)
     return {
       rootNote: rootNote,
